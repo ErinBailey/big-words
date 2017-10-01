@@ -13,6 +13,7 @@
 
 (defroutes app
   (GET "/" request (hello request))
+  (POST "/" request (hello request))
   (route/not-found "<h1>Page not found</h1>"))
 
 (defn -main
