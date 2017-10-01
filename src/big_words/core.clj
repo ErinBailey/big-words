@@ -3,13 +3,16 @@
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.adapter.jetty :refer [run-jetty]]
-            [clojure.pprint :refer [pprint]]))
+            [clojure.pprint :refer [pprint]]
+            [ring.util.request :refer [body-string]]
+            [ring.middleware.params :refer [wrap-params]]))
 
 (defn hello [request]
   (pprint request)
+  (pprint (body-string request))
   {:status 200
    :headers {}
-   :body "Hello, World!"})
+   :body (get-in request [:params "text"])})
 
 (defroutes app
   (GET "/" request (hello request))
@@ -18,5 +21,4 @@
 
 (defn -main
   [& args]
-  (println "Hello, World!")
-  (run-jetty app {:port (Integer/parseInt (System/getenv "PORT"))}))
+  (run-jetty (wrap-params app) {:port (Integer/parseInt (System/getenv "PORT"))}))
