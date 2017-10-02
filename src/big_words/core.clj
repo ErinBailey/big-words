@@ -26,7 +26,6 @@
         " " ":blank:")
       "#" emoji)))
 
-
 (defn command [request]
   (pprint request)
   (pprint (body-string request))
