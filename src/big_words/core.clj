@@ -5,18 +5,38 @@
             [ring.adapter.jetty :refer [run-jetty]]
             [clojure.pprint :refer [pprint]]
             [ring.util.request :refer [body-string]]
-            [ring.middleware.params :refer [wrap-params]]))
+            [ring.middleware.params :refer [wrap-params]]
+            [clojure.string :as str]
+            [big-words.alphabet :refer [alphabet]]))
 
-(defn hello [request]
+(defn dingus [text]
+  (let [[word emoji] (str/split text #" ")
+        word (.toUpperCase word)
+        word (str/split word #"")
+        big-letters (for [letter word] (get alphabet letter))]
+    (.replaceAll
+      (.replaceAll
+        (str/join
+          "\n"
+          (for [row (range 5)]
+            (str/join
+              " "
+              (for [letter big-letters]
+                (nth letter row)))))
+        " " ":blank:")
+      "#" emoji)))
+
+
+(defn command [request]
   (pprint request)
   (pprint (body-string request))
   {:status 200
    :headers {}
-   :body (get-in request [:params "text"])})
+   :body (dingus (get-in request [:params "text"]))})
 
 (defroutes app
-  (GET "/" request (hello request))
-  (POST "/" request (hello request))
+  (GET "/" request (command request))
+  (POST "/" request (command request))
   (route/not-found "<h1>Page not found</h1>"))
 
 (defn -main
