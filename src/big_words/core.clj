@@ -34,7 +34,7 @@
    :body (dingus (get-in request [:params "text"]))})
 
 (defroutes app
-  (GET "/" request (command request))
+  (GET "/" [] "Yo")
   (POST "/" request (command request))
   (route/not-found "<h1>Page not found</h1>"))
 
