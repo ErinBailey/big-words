@@ -9,7 +9,7 @@
             [clojure.string :as str]
             [big-words.alphabet :refer [alphabet]]))
 
-(defn dingus [text]
+(defn conversion [text]
   (let [[word emoji] (str/split text #" ")
         word (.toUpperCase word)
         word (str/split word #"")
@@ -31,7 +31,8 @@
   (pprint (body-string request))
   {:status 200
    :headers {}
-   :body (dingus (get-in request [:params "text"]))})
+   :response_type "in_channel"
+   :body (conversion (get-in request [:params "text"]))})
 
 (defroutes app
   (GET "/" [] "Yo")
