@@ -32,7 +32,7 @@
   (pprint request)
   (pprint (body-string request))
   {:status 200
-   :headers {}
+   :headers {"Content-Type" "application/json"}
    :body (json/write-str {:response_type "in_channel"
            :text (conversion (get-in request [:params "text"]))})})
 
