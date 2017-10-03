@@ -7,7 +7,9 @@
             [ring.util.request :refer [body-string]]
             [ring.middleware.params :refer [wrap-params]]
             [clojure.string :as str]
-            [big-words.alphabet :refer [alphabet]]))
+            [big-words.alphabet :refer [alphabet]]
+            [clojure.data.json :as json]
+            ))
 
 (defn conversion [text]
   (let [[word emoji] (str/split text #" ")
@@ -31,8 +33,8 @@
   (pprint (body-string request))
   {:status 200
    :headers {}
-   :response_type "in_channel"
-   :body (conversion (get-in request [:params "text"]))})
+   :body (json/write-str {:response_type "in_channel"
+           :text (conversion (get-in request [:params "text"]))})})
 
 (defroutes app
   (GET "/" [] "Yo")
