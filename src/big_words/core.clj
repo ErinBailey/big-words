@@ -8,8 +8,7 @@
             [ring.middleware.params :refer [wrap-params]]
             [clojure.string :as str]
             [big-words.alphabet :refer [alphabet]]
-            [clojure.data.json :as json]
-            ))
+            [clojure.data.json :as json]))
 
 (defn conversion [text]
   (let [[word emoji] (str/split text #" ")
