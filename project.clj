@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [compojure "1.6.0"]
                  [ring/ring-jetty-adapter "1.6.2"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [clj-http "3.10.0"]]
 
   :main ^:skip-aot big-words.core
   :target-path "target/%s"

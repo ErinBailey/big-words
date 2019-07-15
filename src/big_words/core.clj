@@ -8,25 +8,26 @@
             [ring.middleware.params :refer [wrap-params]]
             [clojure.string :as str]
             [big-words.alphabet :refer [alphabet]]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clj-http.client :as http]))
 
 (defn conversion [text]
-  (let [[word emoji] (str/split text #" ")
-        word (.toUpperCase word)
-        word (str/split word #"")
-        big-letters (for [letter word] (get alphabet letter))]
+  (let [[phrase emoji] (str/split text #" / ")
+  phrase (.toUpperCase phrase)
+  phrase (str/split phrase #"")
+  big-letters (for [letter phrase] (get alphabet letter))]
+  (.replaceAll
     (.replaceAll
-      (.replaceAll
-        (str/join
-          "\n"
-          (for [row (range 5)]
-            (str/join
-              " "
-              (for [letter big-letters]
-                (nth letter row)))))
-        " " ":blank:")
-      "#" emoji)))
-
+      (str/join
+        "\n"
+        (for [row (range 5)]
+          (str/join
+            " "
+            (for [letter big-letters]
+              (nth letter row)))))
+              " " ":blank:")
+              "#" emoji)))
+            
 (defn command [request]
   (pprint request)
   (pprint (body-string request))
@@ -38,7 +39,7 @@
 (defroutes app
   (GET "/" [] "Yo")
   (POST "/" request (command request))
-  (route/not-found "<h1>Page not found</h1>"))
+  (route/not-found "<h1>Oops, wrong turn</h1>"))
 
 (defn -main
   [& args]
