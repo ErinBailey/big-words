@@ -9,8 +9,16 @@
             [clojure.string :as str]
             [big-words.alphabet :refer [alphabet]]
             [clojure.data.json :as json]
-            [clj-http.client :as http]))
+            [clj-http.client :as client]))
 
+; create a nil atom
+(def DATABASE_USER (atom nil))
+
+; reset env var in a function that is called at runtime
+(defn init-config []
+  (reset! DATABASE_USER (System/getenv "DATABASE_USER"))
+  (pprint DATABASE_USER))
+          
 (defn conversion [text]
   (let [[phrase emoji] (str/split text #" / ")
   phrase (.toUpperCase phrase)

@@ -30,3 +30,21 @@ git push heroku master
 Note: use `heroku login` to authenticate the deploy, do not authenticate heroku through git
 
 -------
+
+# Heroku DB info
+
+To create the DB, I ran this command in the root folder of the project 
+
+`heroku addons:create heroku-postgresql`
+
+output:
+```
+Created postgresql-triangular-47028 as DATABASE_URL
+```
+Use `heroku addons:docs heroku-postgresql` to view documentation
+
+List all environment/config variables 
+`heroku config`
+
+See all PostgreSQL databases provisioned by your application
+`heroku pg:info`
