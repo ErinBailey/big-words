@@ -9,15 +9,10 @@
             [clojure.string :as str]
             [big-words.alphabet :refer [alphabet]]
             [clojure.data.json :as json]
+            [clojure.java.jdbc :as sql]
+            [clj-postgresql.core :as postgres]
+            [clojure.java.jdbc :as jdbc]
             [clj-http.client :as client]))
-
-; create a nil atom
-(def DATABASE_USER (atom nil))
-
-; reset env var in a function that is called at runtime
-(defn init-config []
-  (reset! DATABASE_USER (System/getenv "DATABASE_USER"))
-  (pprint DATABASE_USER))
           
 (defn conversion [text]
   (let [[phrase emoji] (str/split text #" / ")
@@ -44,8 +39,17 @@
    :body (json/write-str {:response_type "in_channel"
            :text (conversion (get-in request [:params "text"]))})})
 
+
+; this works! It will write to the DB when you hit /test
+(defn post-emoji-event [name]
+  (sql/insert! "postgresql://localhost:5432/big-words"
+        :emojis [:emoji :user_name :user_id :channel_name :team_domain] [":whale:" name "246" "direct_message" "bread"]))
+
 (defroutes app
   (GET "/" [] "Yo")
+  (GET "/test" request (post-emoji-event "Erin"))
+  (GET "/urlWithString" request (str (System/getenv "DATABASE_URL"))) ;this is a test to see if I can reference the DB url when I push it up
+  (GET "/urlNoString" request (System/getenv "DATABASE_URL")) ;this is a test to see if I can reference the DB url when I push it up no str
   (POST "/" request (command request))
   (route/not-found "<h1>Oops, wrong turn</h1>"))
 
