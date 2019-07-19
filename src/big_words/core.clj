@@ -41,15 +41,14 @@
 
 
 ; this works! It will write to the DB when you hit /test
+
 (defn post-emoji-event [name]
-  (sql/insert! "postgresql://localhost:5432/big-words"
+  (sql/insert! (System/getenv "DATABASE_URL") ;"postgresql://localhost:5432/big-words" <- use this when hitting the local DB
         :emojis [:emoji :user_name :user_id :channel_name :team_domain] [":whale:" name "246" "direct_message" "bread"]))
 
 (defroutes app
   (GET "/" [] "Yo")
-  (GET "/test" request (post-emoji-event "Erin"))
-  (GET "/urlWithString" request (str (System/getenv "DATABASE_URL"))) ;this is a test to see if I can reference the DB url when I push it up
-  (GET "/urlNoString" request (System/getenv "DATABASE_URL")) ;this is a test to see if I can reference the DB url when I push it up no str
+  (GET "/test-insert" request (post-emoji-event "Erin"))
   (POST "/" request (command request))
   (route/not-found "<h1>Oops, wrong turn</h1>"))
 
