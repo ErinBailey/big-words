@@ -11,7 +11,6 @@
             [clojure.data.json :as json]
             [clojure.java.jdbc :as sql]
             [clj-postgresql.core :as postgres]
-            [clojure.java.jdbc :as jdbc]
             [clj-http.client :as client]))
           
 (defn conversion [text]
@@ -41,14 +40,17 @@
 
 
 ; this works! It will write to the DB when you hit /test
-
 (defn post-emoji-event [name]
   (sql/insert! (System/getenv "DATABASE_URL") ;"postgresql://localhost:5432/big-words" <- use this when hitting the local DB
         :emojis [:emoji :user_name :user_id :channel_name :team_domain] [":whale:" name "246" "direct_message" "bread"]))
 
+(defn select-emoji-event []
+    (sql/query (System/getenv "DATABASE_URL") ["SELECT * FROM emojis"]))
+
 (defroutes app
   (GET "/" [] "Yo")
   (GET "/test-insert" request (post-emoji-event "Erin"))
+  (GET "/test-select" request (select-emoji-event))
   (POST "/" request (command request))
   (route/not-found "<h1>Oops, wrong turn</h1>"))
 

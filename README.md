@@ -31,7 +31,7 @@ Note: use `heroku login` to authenticate the deploy, do not authenticate heroku 
 
 -------
 
-# Heroku DB info
+## Heroku DB info
 
 To create the DB, I ran this command in the root folder of the project 
 
@@ -48,3 +48,12 @@ List all environment/config variables
 
 See all PostgreSQL databases provisioned by your application
 `heroku pg:info`
+
+Connect to the remote Heroku DB 
+`heroku pg:psql`
+
+## Lein REPL info
+
+`lein deps` will install dependencies needed
+
+`lein deps :tree` will show you where your deps have shifted from
